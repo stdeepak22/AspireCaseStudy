@@ -1,0 +1,24 @@
+﻿<div class="panel panel-primary">
+    <div class="panel-heading">
+        {{category.Name}}
+        <div class="pull-right">
+            Created @ {{category.CreatedOn | date : "medium"}}
+        </div>
+    </div>
+    <div class="panel-body">
+        <div ng-show="category.Posts.length">
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Show Post [{{category.Posts.length}}]</button>
+            <div id="demo" class="collapse">
+                <div ng-repeat="post in category.Posts">
+                    <dir-post post="post"></dir-post>
+                </div>
+            </div>
+        </div>
+        <div ng-hide="category.Posts.length" class="ng-cloak">
+            <div class="alert alert-danger">
+                No Post found under this category.
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">Post Count {{category.Posts.length}}</div>
+</div>
