@@ -1,7 +1,7 @@
 ﻿<div ng-hide="pst.postId">
     <div class="row">
         <div class="col-sm-12">
-            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#catEdit" ng-click="pst.CreateNewCat()">Add</button>
+            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#postEdit" ng-click="pst.CreateNewPost()">Add</button>
         </div>
     </div>
     <table class="table">
@@ -19,14 +19,14 @@
         <tbody>
             <tr ng-repeat="p in pst.dataPosts">
                 <td>{{$index+1}}</td>
-                <td><a href="#post/{{p.Id}}">{{p.Title}}</a></td>
+                <td><a href="#Post/{{p.Id}}">{{p.Title}}</a></td>
                 <td >
                     <div style="text-overflow:ellipsis;width:250px;overflow:hidden;white-space: nowrap;">
                         {{p.PostBody}}
                     </div>
                 </td>
                 <td>
-                    {{p.Category.Name}}
+                    {{pst.GetCategoryName(p.CategoryId)}}
                 </td>
                 <td>{{p.CreatedOn | date : "medium"}}</td>
                 <td><button class="btn btn-primary" data-toggle="modal" data-target="#postEdit" ng-click="pst.SetCurrModel(p)">Edit</button></td>
@@ -36,6 +36,14 @@
     </table>
 </div>
 
+<div ng-show="pst.postId">
+    <dir-post post="pst.currentModel"></dir-post>
+    <div class="row">
+        <div class="col-sm-12">
+            <a href="#Post" class="btn btn-primary pull-right">Back</a>
+        </div>
+    </div>
+</div>
 
     <!-- Edit -->
 <div id="postEdit" class="modal fade" role="dialog">
@@ -47,25 +55,13 @@
                 <h4 class="modal-title">Category</h4>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" ng-model="pst.newPostTitle" ng-value="pst.currentModel.Title" />
+                Title - <input type="text" class="form-control" ng-model="pst.newPostTitle" value={{pst.currentModel.Title}} />
                 <br/>
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="catId" data-toggle="dropdown">
-                        Category
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="catId" ng-repeat="c in pst.dataCat">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
-                    </ul>
-                </div>
-                <select ng-model="pst.newPostCatId" class="form-control">
+                Category - <select ng-model="pst.newPostCatId" class="form-control">
                     <option ng-repeat="c in pst.dataCat" value="{{c.Id}}" ng-selected="c.Id==pst.currentModel.CategoryId">{{c.Name}}</option>
                 </select>               
                 <br />
-                <textarea style="height:100px" class="form-control" ng-model="pst.newPostBody" ng-value="pst.currentModel.PostBody"></textarea>
+                Post - <textarea style="height:100px" class="form-control" ng-model="pst.newPostBody" ng-value="pst.currentModel.PostBody"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" ng-click="pst.SaveCurrModel()">Save</button>
@@ -86,10 +82,10 @@
                 <h4 class="modal-title">Post</h4>
             </div>
             <div class="modal-body">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">{{pst.currentModel.Title}}</div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Delete - {{pst.currentModel.Title}}</div>
                     <div class="panel-body">
-                        <div>
+                        <div class="text text-danger">
                             {{pst.currentModel.PostBody}}
                         </div>
                     </div> 

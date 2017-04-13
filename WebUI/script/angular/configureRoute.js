@@ -1,18 +1,12 @@
 ﻿
 app.config(function ($routeProvider, $locationProvider) {
 
-    //$sceDelegateProvider.resourceUrlWhitelist([
-    //   // Allow same origin resource loads.
-    //   'self',
-    //   'http://localhost:65378/**'
-    //]);
-
-
+    $routeProvider.caseInsensitiveMatch = true;
 
     $routeProvider
     .when("/", {
-        templateUrl: "/PARTIALpAGE/_home.html",
-        controller: "Login as c"
+        templateUrl: "/partialPage/_home.html",
+        controller: "ctrlHome as home"
     })
     .when("/Category", {
         templateUrl: "/partialPage/_category.html",
@@ -26,7 +20,7 @@ app.config(function ($routeProvider, $locationProvider) {
         templateUrl: "/partialPage/_post.html",
         controller: "ctrlPost as pst"
     })
-    .when("/Post:postId", {
+    .when("/Post/:postId", {
         templateUrl: "/partialPage/_post.html",
         controller: "ctrlPost as pst"
     });

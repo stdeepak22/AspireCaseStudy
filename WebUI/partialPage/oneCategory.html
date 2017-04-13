@@ -7,14 +7,16 @@
     </div>
     <div class="panel-body">
         <div ng-show="category.Posts.length">
-            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Show Post [{{category.Posts.length}}]</button>
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">{{category.Posts.length}} Post</button>
+            
             <div id="demo" class="collapse">
+                <br/>
                 <div ng-repeat="post in category.Posts">
                     <dir-post post="post"></dir-post>
                 </div>
             </div>
         </div>
-        <div ng-hide="category.Posts.length" class="ng-cloak">
+        <div ng-hide="category.Posts.length">
             <div class="alert alert-danger">
                 No Post found under this category.
             </div>

@@ -20,13 +20,14 @@
                     <td>{{$index+1}}</td>
                     <td><a href="#Category/{{c.Id}}">{{c.Name}}</a></td>
                     <td>{{c.CreatedOn | date : "medium"}}</td>
-                    <td><a href="#">{{c.Posts.length}} Posts</a></td>
+                    <td><a href="#Category/{{c.Id}}">{{c.Posts.length}} Posts</a></td>
                     <td><button class="btn btn-primary" data-toggle="modal" data-target="#catEdit" ng-click="ct.SetCurrModel(c)">Edit</button></td>
                     <td><button class="btn btn-danger" data-toggle="modal" data-target="#catDelete" ng-click="ct.SetCurrModel(c)">Delete</button></td>
                 </tr>
             </tbody>
         </table>    
     </div>
+
     <div ng-show="ct.catId">        
         <dir-category category="ct.currentModel"></dir-category>
         <div class="row">
@@ -45,9 +46,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Category</h4>
                 </div>
-                <div class="modal-body">
-                
-                    <input type="text" class="form-control" ng-model="ct.newName" ng-value="ct.currentModel.Name"></div>
+                <div class="modal-body">                
+                    Category Name - <input type="text" class="form-control" ng-model="ct.newName" ng-value="ct.currentModel.Name"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="ct.SaveCurrModel()" >Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -67,14 +67,19 @@
                 <h4 class="modal-title">Category</h4>
             </div>
             <div class="modal-body">
-                <h3>Name - {{ct.currentModel.Name}}</h3>
-                <br/>
-                <div ng-show="ct.currentModel.Posts.length">
-                    you can not delete this category. It cotains 'Post'. First delete the Posts.
-                </div>
-                <div ng-hide="ct.currentModel.Posts.length">
-                    Are you sure you want to delete this category??
-                </div>                      
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Delete - {{ct.currentModel.Name}}</div>
+                    <div class="panel-body">
+                        <div class="text text-danger">
+                            <div ng-show="ct.currentModel.Posts.length">
+                                You can not delete this category. It contains 'Post'. First delete the Posts.
+                            </div>
+                            <div ng-hide="ct.currentModel.Posts.length">
+                                Are you sure you want to delete this category??
+                            </div>
+                        </div>
+                    </div>
+                </div>                                     
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" ng-click="ct.Delete()" ng-disabled="ct.currentModel.Posts.length">Delete</button>

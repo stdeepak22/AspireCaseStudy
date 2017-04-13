@@ -8,32 +8,14 @@ app.controller('ctrlHomePage', function (activeNode) {
 });
 
 
-app.controller('Login', function (activeNode)
+app.controller('ctrlHome', function (activeNode)
 {
     this.SetMenu = function () {
         activeNode.setActiveMenu('home');
     }
 
+    this.SetMenu();
     this.Welcome = "Hello User.!";
-});
-
-app.controller('test', function FetchCtrl($http) {
-
-    var that = this;
-    that.method = 'GET';
-    that.url = 'https://jsonplaceholder.typicode.com/users/';
-
-    that.fetch = function () {
-        $http({ method: that.method, url: that.url })
-          .then(function (data, status) {
-              that.status = status;
-              that.data = data;
-          }, function (data, status) {
-              that.status = status;
-              that.data = "Request failed";
-          });
-    };
-
 });
 
 app.controller('ctrlCategory', function (activeNode, categoryService, $routeParams)
@@ -57,8 +39,7 @@ app.controller('ctrlCategory', function (activeNode, categoryService, $routePara
                 }
                 else {
                     that.currentModel = response.data;
-                }
-                console.log(response.data);
+                }                
             }, function (response, status) {
                 // handle error
                 console.log("error " + status + "/" + response.data);
@@ -96,7 +77,7 @@ app.controller('ctrlCategory', function (activeNode, categoryService, $routePara
     that.Delete = function () {
         console.log('deleting ID - ' + that.currentModel.Id);
         categoryService.Delete(that.currentModel.Id)
-        .then(function (res, statue) {
+        .then(function (res, status) {
             console.log('Deleted successfully');
             var index = that.dataCategories.indexOf(that.currentModel);
             that.dataCategories.splice(index, 1);
@@ -115,7 +96,7 @@ app.controller('ctrlCategory', function (activeNode, categoryService, $routePara
 });
 
 
-app.controller('ctrlPost', function (activeNode, categoryService, postService, $routeParams) {
+app.controller('ctrlPost', function (activeNode, categoryService, postService, $routeParams, $filter) {
     var that = this;
     that.postId = $routeParams.postId;
 
@@ -134,7 +115,6 @@ app.controller('ctrlPost', function (activeNode, categoryService, postService, $
             console.log("error " + status + "/" + response.data);
         });
 
-
         postService.getPost(that.postId).then(function (response, status) {
             // handle success            
             if (that.postId === undefined) {
@@ -142,8 +122,7 @@ app.controller('ctrlPost', function (activeNode, categoryService, postService, $
             }
             else {
                 that.currentModel = response.data;
-            }
-            console.log(response.data);
+            }            
         }, function (response, status) {
             // handle error
             console.log("error " + status + "/" + response.data);
@@ -159,7 +138,7 @@ app.controller('ctrlPost', function (activeNode, categoryService, postService, $
     }
     
     that.SaveCurrModel = function () {
-        debugger;
+        //debugger;
         that.currentModel.Title = that.newPostTitle;
         that.currentModel.CategoryId = that.newPostCatId;
         that.currentModel.PostBody = that.newPostBody;
@@ -169,23 +148,31 @@ app.controller('ctrlPost', function (activeNode, categoryService, postService, $
         if (isNew) {
             postService.AddNew(that.currentModel).then(function (res, sta) {
                 console.log('Created successfully. ID - ' + res.data.Id);
-                that.currentModel = res.data;
+                that.currentModel = res.data;                
                 that.dataPosts.push(that.currentModel);
             });
         }
         else {
 
-            postService.SaveChanges(that.currentModel.Id, that.currentModel).then(function (res, sta) {
+            var onlyPostObj = that.currentModel;
+            onlyPostObj.Category = undefined;
+            postService.SaveChanges(onlyPostObj.Id, onlyPostObj).then(function (res, sta) {
                 console.log('Saved successfully');
             });
         }
         $('#postEdit').modal('toggle');
     }
 
+    that.GetCategoryName = function(catId)
+    {
+        var r = $filter('filter')(that.dataCat, { 'Id': catId });        
+        return r[0].Name;
+    }
+
     that.Delete = function () {
         console.log('deleting ID - ' + that.currentModel.Id);
         postService.Delete(that.currentModel.Id)
-        .then(function (res, statue) {
+        .then(function (res, status) {
             console.log('Deleted successfully');
             var index = that.dataPosts.indexOf(that.currentModel);
             that.dataPosts.splice(index, 1);
@@ -197,6 +184,7 @@ app.controller('ctrlPost', function (activeNode, categoryService, postService, $
     that.CreateNewPost = function () {        
         that.currentModel = new Object();
         that.currentModel.Title = "";
+        that.currentModel.CategoryId  = 0;
         that.currentModel.PostBody = "";
     }
     that.Get();

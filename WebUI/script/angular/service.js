@@ -8,8 +8,11 @@
     }
 });
 
+
+var webApiRooUrl = "http://localhost:65378/api/";
+
 app.service('categoryService', function (basicWebApi) {
-    var root = 'http://localhost:65378/api/categories/';
+    var root = webApiRooUrl + 'categories/';
 
     this.getCategory = function (catId) {
         return basicWebApi.getData(root, catId);
@@ -29,7 +32,7 @@ app.service('categoryService', function (basicWebApi) {
 });
 
 app.service('postService', function (basicWebApi) {
-    var root = 'http://localhost:65378/api/posts/';
+    var root = webApiRooUrl + 'posts/';
 
     this.getPost = function (postId) {
         return basicWebApi.getData(root, postId);
